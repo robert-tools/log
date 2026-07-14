@@ -121,3 +121,50 @@ export const getCallerInfo = (
     return `${finalFn}()@${relFile}:${line}`;
 };
 export const CI = getCallerInfo;
+
+export class _LOG {
+    items: LogItem[];
+    constructor() {
+        this.items = [];
+    }
+    doLog(type: LogType, msg: string, items: LogItem[], telemetry: any = {}) {
+        const time = new Date().getTime();
+        const logItem: LogItem = {
+            message: msg,
+            type,
+            time,
+            telemetry,
+        };
+        items.push(logItem);
+    }
+    getItems() {
+        return this.items.map((item: LogItem) => {
+            return {
+                message: item.message,
+                type: item.type,
+            };
+        });
+    }
+
+    OK(msg: string, telemetry: any = {}) {
+        this.doLog(LogType.OK, msg, this.items, telemetry);
+    }
+    FAIL(msg: string, telemetry: any = {}) {
+        this.doLog(LogType.FAIL, msg, this.items, telemetry);
+    }
+    WARN(msg: string, telemetry: any = {}) {
+        this.doLog(LogType.WARN, msg, this.items, telemetry);
+    }
+    INFO(msg: string, telemetry: any = {}) {
+        this.doLog(LogType.INFO, msg, this.items, telemetry);
+    }
+    DEFAULT(msg: string, telemetry: any = {}) {
+        this.doLog(LogType.DEFAULT, msg, this.items, telemetry);
+    }
+    INLINE(msg: string, telemetry: any = {}) {
+        this.doLog(LogType.INLINE, msg, this.items, telemetry);
+    }
+    DEBUG(msg: string, telemetry: any = {}) {
+        this.doLog(LogType.DEBUG, msg, this.items, telemetry);
+    }
+}

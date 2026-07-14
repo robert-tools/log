@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { LOG, CI } from './index';
+import { LOG, CI, _LOG } from './index';
 import type { COLOR_SET, LogOpts } from './index.d';
 import * as readline from 'readline';
 import { COLOR_SETS, LogType } from './index.config';
@@ -207,5 +207,68 @@ describe('getCallerInfo()', () => {
             expect(CI()).toBe('(unknown)');
             spy.mockRestore();
         });
+    });
+});
+describe('class: _LOG', () => {
+    const CLASS = _LOG;
+    it('should do all instance methods', () => {
+        const _log = new CLASS();
+        _log.doLog(LogType.OK, 'ok message', _log.items, { foo: 2 });
+        _log.doLog(LogType.FAIL, 'fail message', _log.items);
+        _log.doLog(LogType.WARN, 'warn message', _log.items);
+        _log.doLog(LogType.INFO, 'info message', _log.items);
+        _log.doLog(LogType.DEFAULT, 'default message', _log.items);
+        _log.doLog(LogType.INLINE, 'inline message', _log.items);
+        _log.doLog(LogType.DEBUG, 'debug message', _log.items);
+        const time = expect.any(Number);
+        const telemetry = {};
+        const EXPECTED = [
+            { message: 'ok message', type: 'OK', time, telemetry: { foo: 2 } },
+            { message: 'fail message', type: 'FAIL', time, telemetry },
+            { message: 'warn message', type: 'WARN', time, telemetry },
+            { message: 'info message', type: 'INFO', time, telemetry },
+            { message: 'default message', type: 'DEFAULT', time, telemetry },
+            { message: 'inline message', type: 'INLINE', time, telemetry },
+            { message: 'debug message', type: 'DEBUG', time, telemetry },
+        ];
+        const EXPECTED_SHORT = EXPECTED.map((item) => ({
+            message: item.message,
+            type: item.type,
+        }));
+        expect(_log.items.length).toBe(EXPECTED.length);
+        const items = _log.items;
+        expect(items).toEqual(EXPECTED);
+        expect(_log.getItems()).toEqual(EXPECTED_SHORT);
+    });
+    it('should call directly the methods', () => {
+        const _log = new CLASS();
+        _log.OK('ok message', { foo: 2 });
+        _log.OK('ok 2 message');
+        _log.FAIL('fail message');
+        _log.WARN('warn message');
+        _log.INFO('info message');
+        _log.DEFAULT('default message');
+        _log.INLINE('inline message');
+        _log.DEBUG('debug message');
+        const time = expect.any(Number);
+        const telemetry = {};
+        const EXPECTED = [
+            { message: 'ok message', type: 'OK', time, telemetry: { foo: 2 } },
+            { message: 'ok 2 message', type: 'OK', time, telemetry },
+            { message: 'fail message', type: 'FAIL', time, telemetry },
+            { message: 'warn message', type: 'WARN', time, telemetry },
+            { message: 'info message', type: 'INFO', time, telemetry },
+            { message: 'default message', type: 'DEFAULT', time, telemetry },
+            { message: 'inline message', type: 'INLINE', time, telemetry },
+            { message: 'debug message', type: 'DEBUG', time, telemetry },
+        ];
+        const EXPECTED_SHORT = EXPECTED.map((item) => ({
+            message: item.message,
+            type: item.type,
+        }));
+        expect(_log.items.length).toBe(EXPECTED.length);
+        const items = _log.items;
+        expect(items).toEqual(EXPECTED);
+        expect(_log.getItems()).toEqual(EXPECTED_SHORT);
     });
 });
