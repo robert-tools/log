@@ -1,6 +1,6 @@
 {
     "name": "@robert.tools/log",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "A package to provide tools for logging",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -54,5 +54,6 @@
         "typescript": "^5.9.0"
     },
     "dependencies": {
+        "@robert.tools/colors": "^1.0.0"
     }
 }
