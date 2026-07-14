@@ -9,6 +9,7 @@ import parserTS from '@typescript-eslint/parser';
 export default [
     {
         ignores: [
+          'dist/**',
           'coverage/**',
           'node_modules/**'
         ],
