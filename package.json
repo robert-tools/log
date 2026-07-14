@@ -1,0 +1,47 @@
+{
+    "name": "@willi84/package",
+    "version": "0.0.1",
+    "description": "A small TypeScript package.",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "test": "jest --coverage --runInBand --verbose",
+        "lint": "eslint .",
+        "check": "npm run lint && npm test && npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/willi84/package.git"
+    },
+    "author": "Robert Willemelis",
+    "license": "MIT",
+    "engines": {
+        "node": ">=22"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.14",
+        "@types/node": "^24.0.0",
+        "@typescript-eslint/eslint-plugin": "^8.0.0",
+        "@typescript-eslint/parser": "^8.0.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.6",
+        "eslint": "^9.0.0",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.6.2",
+        "ts-jest": "^29.4.0",
+        "typescript": "^5.9.0"
+    }
+}
