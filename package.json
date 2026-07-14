@@ -1,7 +1,7 @@
 {
-    "name": "@willi84/package",
-    "version": "0.0.1",
-    "description": "A small TypeScript package.",
+    "name": "@robert.tools/log",
+    "version": "0.0.2",
+    "description": "A package to provide tools for logging",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -17,19 +17,31 @@
         "build": "tsc -p tsconfig.build.json",
         "test": "jest --coverage --runInBand --verbose",
         "lint": "eslint .",
-        "check": "npm run lint && npm test && npm run build"
+        "check": "npm run lint && npm test && npm run build",
+        "prepublishOnly": "npm run check"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/willi84/package.git"
+        "url": "git+https://github.com/robert-tools/log.git"
     },
+    "bugs": {
+        "url": "https://github.com/robert-tools/log/issues"
+    },
+    "homepage": "https://github.com/robert-tools/log#readme",
+    "keywords": [
+        "typescript",
+        "node",
+        "logging",
+        "robert.tools"
+    ],
     "author": "Robert Willemelis",
     "license": "MIT",
     "engines": {
         "node": ">=22"
     },
     "publishConfig": {
-        "access": "public"
+        "access": "public",
+         "registry": "https://registry.npmjs.org/"
     },
     "devDependencies": {
         "@types/jest": "^29.5.14",
