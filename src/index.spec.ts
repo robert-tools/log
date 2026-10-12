@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { LOG, CI, _LOG } from './index';
+import { LOG, CI, _LOG, green } from './index';
 import type { COLOR_SET, LogOpts } from './index.d';
 import * as readline from 'readline';
 import { COLOR_SETS, LogType } from './index.config';
@@ -270,5 +270,12 @@ describe('class: _LOG', () => {
         const items = _log.items;
         expect(items).toEqual(EXPECTED);
         expect(_log.getItems()).toEqual(EXPECTED_SHORT);
+    });
+});
+describe('shortcuts', () => {
+    it('should colorize text correctly', () => {
+        expect(green('foo')).toEqual(
+            `${colors.BgBlack} ${colors.FgGreen}foo${colors.Reset} `
+        );
     });
 });

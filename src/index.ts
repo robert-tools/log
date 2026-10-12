@@ -10,22 +10,49 @@ import { colors } from '@robert.tools/colors';
 // let noEmojis = isMicrosoft && hasLinuxPlattform && (!isVSCode);
 // https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
 
+/**
+ * 🎯 Resolves the color set for the given log type.
+ * @param {LogType} type ➡️ The type of log message.
+ * @returns {COLOR_SET} 📤 The corresponding color set for the log type.
+ */
 const getColorSet = (type: LogType): COLOR_SET => {
     const resolvedType = type as keyof typeof COLOR_SETS;
     const colorSet: COLOR_SET = COLOR_SETS[resolvedType] as COLOR_SET;
     return colorSet;
 };
 
+/**
+ * 🎯 Creates a logger function for the specified log type.
+ * @param {LogType} type ➡️ The type of log message.
+ * @returns {(msg: string, opts?: LogOpts) => void} 📤 The logger function for the specified log type.
+ */
 const makeLogger = (type: LogType) => (msg: string, opts?: LogOpts) => {
     LOG.logger(type, msg, opts || { icon: '', newline: false });
 };
 
+/**
+ * 🎯 Colorizes a message with the specified background and foreground colors.
+ * @param {string} msg ➡️ The message to be colorized.
+ * @param {string} bg ➡️ The background color.
+ * @param {string} fg ➡️ The foreground color.
+ * @param {string} pad ➡️ The padding to be applied around the message.
+ * @returns {string} 📤 The colorized message as a string.
+ */
 export const colorize = (msg: string, bg: string, fg: string, pad = '  ') => {
     const colorSet = `${pad}${fg} ${bg}${pad}`;
     const result = `${colorSet}${pad}${msg}${pad}${colors.Reset} `;
     return msg !== '' ? `${result}` : '';
 };
 
+/**
+ * 🎯 The main logging class that provides methods for logging messages with different log types.
+ * @class LOG
+ * @example
+ * LOG.OK('This is an OK message');
+ * LOG.FAIL('This is a FAIL message');
+ * LOG.WARN('This is a WARN message');
+ * LOG.INFO('This is an INFO message');
+ */
 export class LOG {
     items: LogItem[];
     constructor() {
@@ -89,6 +116,13 @@ export class LOG {
     INLINE = this.makeLogger(LogType.INLINE);
     DEBUG = this.makeLogger(LogType.DEBUG);
 }
+
+/**
+ * 🎯 Retrieves the caller information from the stack trace.
+ * @param {string} [classHint] ➡️ Optional class name hint to prepend to the function name.
+ * @param {number} [depth=2] ➡️ The depth in the stack trace to retrieve the caller from.
+ * @returns {string} 📤 The formatted caller information in the form `function()@file:line`.
+ */
 export const getCallerInfo = (
     classHint?: string,
     depth: number = 2
@@ -122,6 +156,10 @@ export const getCallerInfo = (
 };
 export const CI = getCallerInfo;
 
+/**
+ * 🎯 The main logging class that provides methods for logging messages with different log types.
+ * @class _LOG
+ */
 export class _LOG {
     items: LogItem[];
     constructor() {
@@ -168,3 +206,26 @@ export class _LOG {
         this.doLog(LogType.DEBUG, msg, this.items, telemetry);
     }
 }
+
+/**
+ * 🎯 Creates a shortcut function for colorizing text with the specified foreground and background colors.
+ * @param {any} text ➡️ The text to colorize.
+ * @param {string} keyFg ➡️ The key for the foreground color.
+ * @param {string} keyBg ➡️ The key for the background color.
+ * @returns {string} 📤 The colorized text.
+ */
+const shortcut = (text: any, keyFg: string, keyBg: string) => {
+    const fg = colors[keyFg as keyof typeof colors] ?? '';
+    const bg = colors[keyBg as keyof typeof colors] ?? '';
+    return colorize(text + '', fg, bg, '');
+};
+
+// shortcuts
+export const green = (text: any) => shortcut(text, 'FgGreen', 'BgBlack');
+export const yellow = (text: any) => shortcut(text, 'FgYellow', 'BgBlack');
+export const red = (text: any) => shortcut(text, 'FgRed', 'BgBlack');
+export const white = (text: any) => shortcut(text, 'FgWhite', 'BgBlack');
+export const blue = (text: any) => shortcut(text, 'FgBlue', 'BgBlack');
+export const magenta = (text: any) => shortcut(text, 'FgMagenta', 'BgBlack');
+export const cyan = (text: any) => shortcut(text, 'FgCyan', 'BgBlack');
+export const black = (text: any) => shortcut(text, 'FgBlack', 'BgWhite');
